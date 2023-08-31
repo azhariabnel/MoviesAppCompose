@@ -17,18 +17,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.moviesappcompose.navigation.MoviesNavigation
+import com.example.moviesappcompose.screens.home.MoviesViewModel
 import com.example.moviesappcompose.ui.theme.MoviesAppComposeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MoviesAppComposeTheme {
-                // A surface container using the 'background' color from the theme
-                MainApp {
-                    MoviesNavigation()
-                }
+            MoviesAppComposeTheme(darkTheme = true) {
+                MoviesNavigation()
+
             }
         }
     }

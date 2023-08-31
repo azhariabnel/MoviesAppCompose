@@ -1,10 +1,12 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.moviesappcompose"
@@ -46,14 +48,15 @@ android {
 }
 
 dependencies {
-    def nav_version = "2.4.2"
+    implementation project(path: ':servicedata')
+    def nav_version = "2.5.3"
 
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.activity:activity-compose:1.7.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -66,5 +69,32 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$nav_version")
     //coil
     implementation("io.coil-kt:coil-compose:2.1.0")
+
+    //coroutine + viewmodel
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModel_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$viewModel_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$viewModel_version"
+
+    // Paging Compose
+    implementation "com.google.accompanist:accompanist-pager:0.22.0-rc"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.22.0-rc"
+
+    //okhttp + retrofit
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.4.0'
+    api 'com.google.code.gson:gson:2.8.9'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    api "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    //Hilt
+    kapt 'androidx.hilt:hilt-compiler:1.0.0'
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+    implementation "com.google.dagger:hilt-android:2.45"
+    kapt "com.google.dagger:hilt-android-compiler:2.45"
+
+    //Shimmer
+    implementation "com.google.accompanist:accompanist-placeholder-material:0.22.0-rc"
 
 }

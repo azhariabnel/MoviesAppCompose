@@ -1,4 +1,4 @@
-package com.example.moviesappcompose.model
+package com.example.moviesappcompose.dummy
 
 data class Movies(
     val id : String,
