@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.moviesappcompose.FadeOutSplash
 import com.example.moviesappcompose.screens.detail.DetailScreen
 import com.example.moviesappcompose.screens.home.HomeScreen
+import com.example.moviesappcompose.screens.home.MovieListByGenreScreen
 import com.example.moviesappcompose.screens.home.MoviesViewModel
 
 @Composable
@@ -24,6 +25,9 @@ fun MoviesNavigation(){
             }
             composable(MoviesScreens.DetailScreen.route){
                 DetailScreen(navController = navController,viewModel)
+            }
+            composable(MoviesScreens.MovieListByGenre.route){
+                MovieListByGenreScreen(navController = navController,viewModel)
             }
             /*composable(MoviesScreens.DetailScreen.name+"/{movies}",
                         arguments = listOf(navArgument(name = "movies"){type = NavType.StringType})){

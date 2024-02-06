@@ -41,6 +41,23 @@ data class RecommendationMovieUiState<T>(
     val error: Exception? = null
 )
 
+data class MoviesGenreUiState<T>(
+    val genres: T? = null,
+    val success: Boolean = false,
+    val error: Exception? = null
+)
+
+data class MoviesByGenreUiState<T>(
+    val movies: T? = null,
+    val success: Boolean = false,
+    val error: Exception? = null
+)
+data class ReviewsUiState<T>(
+    val reviews: T? = null,
+    val success: Boolean = false,
+    val error: Exception? = null
+)
+
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
     private val repository: BaseRepository
@@ -58,8 +75,25 @@ class MoviesViewModel @Inject constructor(
     private val _recommendationUiState = MutableStateFlow(RecommendationMovieUiState<TopRatedResponse>())
     val recommendationUiState: StateFlow<RecommendationMovieUiState<TopRatedResponse>> = _recommendationUiState.asStateFlow()
 
+    private val _genreUiState = MutableStateFlow(MoviesGenreUiState<GenreResponse>())
+    val genreUiState: StateFlow<MoviesGenreUiState<GenreResponse>> = _genreUiState.asStateFlow()
+
+    private val _moviesByGenreUiState = MutableStateFlow(MoviesByGenreUiState<MoviesByGenre>())
+    val moviesByGenreUiState: StateFlow<MoviesByGenreUiState<MoviesByGenre>> = _moviesByGenreUiState.asStateFlow()
+
+    private val _reviewsUiState = MutableStateFlow(ReviewsUiState<ReviewsResponse>())
+    val reviewsUiState: StateFlow<ReviewsUiState<ReviewsResponse>> = _reviewsUiState.asStateFlow()
+
     var detailMovieData by mutableStateOf<String?>(null)
         private set
+
+    var genreIdData by mutableStateOf<String?>(null)
+        private set
+
+    var genreNameData by mutableStateOf<String?>(null)
+        private set
+
+    var startingPage = 1
 
     fun getNowPlaying(){
         viewModelScope.launch {
@@ -113,8 +147,50 @@ class MoviesViewModel @Inject constructor(
         }
     }
 
+    fun getMoviesGenre(){
+        viewModelScope.launch {
+            val result = repository.getMoviesGenre(language = "en", apiKey = "fbb9572d11b5458ac98f02b84f2bafc4")
+            _genreUiState.update {
+                when(result){
+                    is Result.Success -> it.copy(genres = result.data, success = true,error = null)
+                    is Result.Error -> it.copy(error = result.exception, success = false)
+                }
+            }
+        }
+    }
+
+    fun getMoviesGenre(withGenres: String){
+        viewModelScope.launch {
+            val result = repository.getMoviesByGenre(page = startingPage, withGenres = withGenres, apiKey = "fbb9572d11b5458ac98f02b84f2bafc4")
+            _moviesByGenreUiState.update {
+                when(result){
+                    is Result.Success -> it.copy(movies = result.data, success = true,error = null)
+                    is Result.Error -> it.copy(error = result.exception, success = false)
+                }
+            }
+        }
+    }
+
+    fun getMoviesReview(movieId: String){
+        viewModelScope.launch {
+            val result = repository.getMoviesReviews(movieId,apiKey = "fbb9572d11b5458ac98f02b84f2bafc4")
+            _reviewsUiState.update {
+                when(result){
+                    is Result.Success -> it.copy(
+                        reviews = result.data,success = true,error = null)
+                    is Result.Error -> it.copy(error = result.exception, success = false)
+                }
+            }
+        }
+    }
+
     fun addDetailData(movieId: String){
         detailMovieData = movieId
+    }
+
+    fun addGenreId(genreId: String,genreName: String){
+        genreIdData = genreId
+        genreNameData = genreName
     }
 
 }
